@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+// The social network service definition.
+service TSN {
+	// Registers a new user
+	rpc AddUser (UserRequest) returns (UserReply) {}
+	
+	// Lists all users
+	rpc ListUsers (UserRequest) returns (ListUsersReply) {}
+	
+	// Follows a particular user
+	rpc FollowUser (FollowUserRequest) returns (UserReply) {}
+	
+	// Unfollows a particular user
+	rpc UnfollowUser (UnfollowUserRequest) returns (UserReply) {}
+	
+	// Enters timeline mode for a particular user
+	rpc ProcessTimeline(stream PostMessage) returns (stream PostMessage) {}
+}
+
+// The request message containing the user's name.
+message UserRequest {
+	string username = 1;
+}
+
+// A request to follow a particular user
+message FollowUserRequest {
+	string username = 1;
+	string user_to_follow = 2;
+}
+
+// A request to unfollow a particular user
+message UnfollowUserRequest {
+	string username = 1;
+	string user_to_unfollow = 2;
+}
+
+// A response containing a list of all users and followed users
+message ListUsersReply {
+	int32 status = 1;
+	string all_users = 2;
+	string followers = 3;
+}
+
+// The response message containing the status of an RPC (success or failure)
+message UserReply {
+	int32 status = 1;
+}
+
+// A message containing a timeline post
+message PostMessage {
+	int64 time = 1;
+	string sender = 2;
+	string content = 3;
+}
